@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 from haversine import haversine
 from datetime import datetime
+from itertools import permutations
 import pandas as pd
 import re
 import polyline
@@ -83,31 +84,7 @@ def unique_permutations(nums: List[int]) -> List[List[int]]:
     :param nums: List of integers (may contain duplicates)
     :return: List of unique permutations
     """
-
-    def should_swap(arr: List[int], start: int, curr: int) -> bool:
-        for i in range(start, curr):
-            if arr[i] == arr[curr]:
-                return False
-        return True
-
-    def generate_unique_permutations(
-        arr: List[int], start: int, result: List[List[int]]
-    ) -> None:
-        if start == len(arr):
-            result.append(arr[:])
-            return
-
-        for i in range(start, len(arr)):
-            # Skip if position already used the value
-            if should_swap(arr, start, i):
-                arr[start], arr[i] = arr[i], arr[start]
-                generate_unique_permutations(arr, start + 1, result)
-                arr[start], arr[i] = arr[i], arr[start]
-
-    nums.sort()
-    result = []
-    generate_unique_permutations(nums, 0, result)
-    return result
+    return [list(perm) for perm in set(permutations(nums))]
 
 
 def find_all_dates(text: str) -> List[str]:
